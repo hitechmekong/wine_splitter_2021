@@ -1,3 +1,4 @@
+
 /*
    Copyright 2020 @ Nhannv - HitechMekong LTD. Co, - nhannv@hitechmekong.vn
 
@@ -35,6 +36,7 @@
 #define BUMP_PIN 16
 #define START_BTN_PIN 2 // attachInterrupt (OneButton Library) only supports pin 2 and 3 on UNO/NAN0. More info : https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/
 #define SETTING_BTN_PIN 3
+#define DEFAULT_BUMP_TIME 5 //default is 5 second
 
 //include library
 #include "SevSeg.h"
@@ -50,7 +52,7 @@ boolean isFinish = false;
 boolean hitGlass = false;
 int NoOfGlasses = 0;
 static int ledNo = 0;
-int bumpTime = DEFAUL_BUMP_TIME;
+int bumpTime = DEFAULT_BUMP_TIME;
 
 // save the millis when a press has started.
 unsigned long pressStartTime;
@@ -78,8 +80,8 @@ void setup() {
   //count 3 seconds to begin system
   //Use for system check before running
   if (checkDevice()) {
-    showLED_manual(0);
-  } else showLED_manual(111);
+    showLED_int_manual(0);
+  } else showLED_int_manual(111);
 
   //Serial
   Serial.begin(9600);
@@ -118,15 +120,15 @@ void loop() {
 
 //Call this function at the system start to test each device.
 boolean checkDevice() {
-  ledShow_char_manual(0);
+  showLED_char_manual(0);
   for (int runtime = 0 ; runtime <= 1000 ; runtime++) {
     runMotor(100);
   }
-  ledShow_char_manual(1);
+  showLED_char_manual(1);
   for (int runtime = 0 ; runtime <= 1000 ; runtime++) {
     runBump();
   }
-  ledShow_char_manual(2);
+  showLED_char_manual(2);
   delay (1000);
   return true;
 }
